@@ -11,11 +11,11 @@ _utilities.register(
     resource_modules="""
 [
  {
-  "pkg": "xyz",
+  "pkg": "improvmx",
   "mod": "index",
-  "fqn": "pulumi_xyz",
+  "fqn": "pulumi_improvmx",
   "classes": {
-   "xyz:index:Random": "Random"
+   "improvmx:index:Random": "Random"
   }
  }
 ]
@@ -23,9 +23,9 @@ _utilities.register(
     resource_packages="""
 [
  {
-  "pkg": "xyz",
-  "token": "pulumi:providers:xyz",
-  "fqn": "pulumi_xyz",
+  "pkg": "improvmx",
+  "token": "pulumi:providers:improvmx",
+  "fqn": "pulumi_improvmx",
   "class": "Provider"
  }
 ]
