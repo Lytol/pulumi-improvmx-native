@@ -1,10 +1,10 @@
-PROJECT_NAME := Pulumi Xyz Resource Provider
+PROJECT_NAME := Pulumi ImprovMX Resource Provider
 
-PACK             := xyz
+PACK             := improvmx
 PACKDIR          := sdk
-PROJECT          := github.com/pulumi/pulumi-xyz
-NODE_MODULE_NAME := @pulumi/xyz
-NUGET_PKG_NAME   := Pulumi.Xyz
+PROJECT          := github.com/Lytol/pulumi-improvmx-native
+NODE_MODULE_NAME := @pulumi/improvmx
+NUGET_PKG_NAME   := Pulumi.improvmx
 
 PROVIDER        := pulumi-resource-${PACK}
 VERSION         ?= $(shell pulumictl get version)
