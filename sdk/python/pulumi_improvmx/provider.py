@@ -13,16 +13,47 @@ __all__ = ['ProviderArgs', 'Provider']
 
 @pulumi.input_type
 class ProviderArgs:
-    def __init__(__self__):
+    def __init__(__self__, *,
+                 api_key: pulumi.Input[str],
+                 version: pulumi.Input[str]):
         """
         The set of arguments for constructing a Provider resource.
+        :param pulumi.Input[str] api_key: API key for the ImprovMX
         """
-        pass
+        ProviderArgs._configure(
+            lambda key, value: pulumi.set(__self__, key, value),
+            api_key=api_key,
+            version=version,
+        )
     @staticmethod
     def _configure(
              _setter: Callable[[Any, Any], None],
+             api_key: pulumi.Input[str],
+             version: pulumi.Input[str],
              opts: Optional[pulumi.ResourceOptions]=None):
-        pass
+        _setter("api_key", api_key)
+        _setter("version", version)
+
+    @property
+    @pulumi.getter
+    def api_key(self) -> pulumi.Input[str]:
+        """
+        API key for the ImprovMX
+        """
+        return pulumi.get(self, "api_key")
+
+    @api_key.setter
+    def api_key(self, value: pulumi.Input[str]):
+        pulumi.set(self, "api_key", value)
+
+    @property
+    @pulumi.getter
+    def version(self) -> pulumi.Input[str]:
+        return pulumi.get(self, "version")
+
+    @version.setter
+    def version(self, value: pulumi.Input[str]):
+        pulumi.set(self, "version", value)
 
 
 class Provider(pulumi.ProviderResource):
@@ -30,17 +61,20 @@ class Provider(pulumi.ProviderResource):
     def __init__(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 api_key: Optional[pulumi.Input[str]] = None,
+                 version: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         """
         Create a Improvmx resource with the given unique name, props, and options.
         :param str resource_name: The name of the resource.
         :param pulumi.ResourceOptions opts: Options for the resource.
+        :param pulumi.Input[str] api_key: API key for the ImprovMX
         """
         ...
     @overload
     def __init__(__self__,
                  resource_name: str,
-                 args: Optional[ProviderArgs] = None,
+                 args: ProviderArgs,
                  opts: Optional[pulumi.ResourceOptions] = None):
         """
         Create a Improvmx resource with the given unique name, props, and options.
@@ -63,6 +97,8 @@ class Provider(pulumi.ProviderResource):
     def _internal_init(__self__,
                  resource_name: str,
                  opts: Optional[pulumi.ResourceOptions] = None,
+                 api_key: Optional[pulumi.Input[str]] = None,
+                 version: Optional[pulumi.Input[str]] = None,
                  __props__=None):
         opts = pulumi.ResourceOptions.merge(_utilities.get_resource_opts_defaults(), opts)
         if not isinstance(opts, pulumi.ResourceOptions):
@@ -72,9 +108,30 @@ class Provider(pulumi.ProviderResource):
                 raise TypeError('__props__ is only valid when passed in combination with a valid opts.id to get an existing resource')
             __props__ = ProviderArgs.__new__(ProviderArgs)
 
+            if api_key is None and not opts.urn:
+                raise TypeError("Missing required property 'api_key'")
+            __props__.__dict__["api_key"] = None if api_key is None else pulumi.Output.secret(api_key)
+            if version is None and not opts.urn:
+                raise TypeError("Missing required property 'version'")
+            __props__.__dict__["version"] = version
+        secret_opts = pulumi.ResourceOptions(additional_secret_outputs=["api_key"])
+        opts = pulumi.ResourceOptions.merge(opts, secret_opts)
         super(Provider, __self__).__init__(
             'improvmx',
             resource_name,
             __props__,
             opts)
+
+    @property
+    @pulumi.getter
+    def api_key(self) -> pulumi.Output[str]:
+        """
+        API key for the ImprovMX
+        """
+        return pulumi.get(self, "api_key")
+
+    @property
+    @pulumi.getter
+    def version(self) -> pulumi.Output[str]:
+        return pulumi.get(self, "version")
 

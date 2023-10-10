@@ -7,6 +7,7 @@ import (
 	"context"
 	"reflect"
 
+	"errors"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumix"
 	"internal"
@@ -14,15 +15,32 @@ import (
 
 type Provider struct {
 	pulumi.ProviderResourceState
+
+	// API key for the ImprovMX
+	Api_key pulumi.StringOutput `pulumi:"api_key"`
+	Version pulumi.StringOutput `pulumi:"version"`
 }
 
 // NewProvider registers a new resource with the given unique name, arguments, and options.
 func NewProvider(ctx *pulumi.Context,
 	name string, args *ProviderArgs, opts ...pulumi.ResourceOption) (*Provider, error) {
 	if args == nil {
-		args = &ProviderArgs{}
+		return nil, errors.New("missing one or more required arguments")
 	}
 
+	if args.Api_key == nil {
+		return nil, errors.New("invalid value for required argument 'Api_key'")
+	}
+	if args.Version == nil {
+		return nil, errors.New("invalid value for required argument 'Version'")
+	}
+	if args.Api_key != nil {
+		args.Api_key = pulumi.ToSecret(args.Api_key).(pulumi.StringInput)
+	}
+	secrets := pulumi.AdditionalSecretOutputs([]string{
+		"api_key",
+	})
+	opts = append(opts, secrets)
 	opts = internal.PkgResourceDefaultOpts(opts)
 	var resource Provider
 	err := ctx.RegisterResource("pulumi:providers:improvmx", name, args, &resource, opts...)
@@ -33,10 +51,16 @@ func NewProvider(ctx *pulumi.Context,
 }
 
 type providerArgs struct {
+	// API key for the ImprovMX
+	Api_key string `pulumi:"api_key"`
+	Version string `pulumi:"version"`
 }
 
 // The set of arguments for constructing a Provider resource.
 type ProviderArgs struct {
+	// API key for the ImprovMX
+	Api_key pulumi.StringInput
+	Version pulumi.StringInput
 }
 
 func (ProviderArgs) ElementType() reflect.Type {
@@ -86,6 +110,15 @@ func (o ProviderOutput) ToOutput(ctx context.Context) pulumix.Output[*Provider] 
 	return pulumix.Output[*Provider]{
 		OutputState: o.OutputState,
 	}
+}
+
+// API key for the ImprovMX
+func (o ProviderOutput) Api_key() pulumi.StringOutput {
+	return o.ApplyT(func(v *Provider) pulumi.StringOutput { return v.Api_key }).(pulumi.StringOutput)
+}
+
+func (o ProviderOutput) Version() pulumi.StringOutput {
+	return o.ApplyT(func(v *Provider) pulumi.StringOutput { return v.Version }).(pulumi.StringOutput)
 }
 
 func init() {

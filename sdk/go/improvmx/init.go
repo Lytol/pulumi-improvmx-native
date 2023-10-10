@@ -21,8 +21,10 @@ func (m *module) Version() semver.Version {
 
 func (m *module) Construct(ctx *pulumi.Context, name, typ, urn string) (r pulumi.Resource, err error) {
 	switch typ {
-	case "improvmx:index:Random":
-		r = &Random{}
+	case "improvmx:index:Alias":
+		r = &Alias{}
+	case "improvmx:index:Domain":
+		r = &Domain{}
 	default:
 		return nil, fmt.Errorf("unknown resource type: %s", typ)
 	}

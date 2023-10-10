@@ -9,30 +9,36 @@ using Pulumi.Serialization;
 
 namespace Pulumi.Improvmx
 {
-    [ImprovmxResourceType("improvmx:index:Random")]
-    public partial class Random : global::Pulumi.CustomResource
+    [ImprovmxResourceType("improvmx:index:Domain")]
+    public partial class Domain : global::Pulumi.CustomResource
     {
-        [Output("length")]
-        public Output<int> Length { get; private set; } = null!;
+        [Output("name")]
+        public Output<string> Name { get; private set; } = null!;
+
+        [Output("notification_email")]
+        public Output<string?> Notification_email { get; private set; } = null!;
 
         [Output("result")]
         public Output<string> Result { get; private set; } = null!;
 
+        [Output("whitelabel")]
+        public Output<string?> Whitelabel { get; private set; } = null!;
+
 
         /// <summary>
-        /// Create a Random resource with the given unique name, arguments, and options.
+        /// Create a Domain resource with the given unique name, arguments, and options.
         /// </summary>
         ///
         /// <param name="name">The unique name of the resource</param>
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
-        public Random(string name, RandomArgs args, CustomResourceOptions? options = null)
-            : base("improvmx:index:Random", name, args ?? new RandomArgs(), MakeResourceOptions(options, ""))
+        public Domain(string name, DomainArgs args, CustomResourceOptions? options = null)
+            : base("improvmx:index:Domain", name, args ?? new DomainArgs(), MakeResourceOptions(options, ""))
         {
         }
 
-        private Random(string name, Input<string> id, CustomResourceOptions? options = null)
-            : base("improvmx:index:Random", name, null, MakeResourceOptions(options, id))
+        private Domain(string name, Input<string> id, CustomResourceOptions? options = null)
+            : base("improvmx:index:Domain", name, null, MakeResourceOptions(options, id))
         {
         }
 
@@ -48,27 +54,33 @@ namespace Pulumi.Improvmx
             return merged;
         }
         /// <summary>
-        /// Get an existing Random resource's state with the given name, ID, and optional extra
+        /// Get an existing Domain resource's state with the given name, ID, and optional extra
         /// properties used to qualify the lookup.
         /// </summary>
         ///
         /// <param name="name">The unique name of the resulting resource.</param>
         /// <param name="id">The unique provider ID of the resource to lookup.</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
-        public static Random Get(string name, Input<string> id, CustomResourceOptions? options = null)
+        public static Domain Get(string name, Input<string> id, CustomResourceOptions? options = null)
         {
-            return new Random(name, id, options);
+            return new Domain(name, id, options);
         }
     }
 
-    public sealed class RandomArgs : global::Pulumi.ResourceArgs
+    public sealed class DomainArgs : global::Pulumi.ResourceArgs
     {
-        [Input("length", required: true)]
-        public Input<int> Length { get; set; } = null!;
+        [Input("name", required: true)]
+        public Input<string> Name { get; set; } = null!;
 
-        public RandomArgs()
+        [Input("notification_email")]
+        public Input<string>? Notification_email { get; set; }
+
+        [Input("whitelabel")]
+        public Input<string>? Whitelabel { get; set; }
+
+        public DomainArgs()
         {
         }
-        public static new RandomArgs Empty => new RandomArgs();
+        public static new DomainArgs Empty => new DomainArgs();
     }
 }

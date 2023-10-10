@@ -13,13 +13,23 @@ namespace Pulumi.Improvmx
     public partial class Provider : global::Pulumi.ProviderResource
     {
         /// <summary>
+        /// API key for the ImprovMX
+        /// </summary>
+        [Output("api_key")]
+        public Output<string> Api_key { get; private set; } = null!;
+
+        [Output("version")]
+        public Output<string> Version { get; private set; } = null!;
+
+
+        /// <summary>
         /// Create a Provider resource with the given unique name, arguments, and options.
         /// </summary>
         ///
         /// <param name="name">The unique name of the resource</param>
         /// <param name="args">The arguments used to populate this resource's properties</param>
         /// <param name="options">A bag of options that control this resource's behavior</param>
-        public Provider(string name, ProviderArgs? args = null, CustomResourceOptions? options = null)
+        public Provider(string name, ProviderArgs args, CustomResourceOptions? options = null)
             : base("improvmx", name, args ?? new ProviderArgs(), MakeResourceOptions(options, ""))
         {
         }
@@ -29,6 +39,10 @@ namespace Pulumi.Improvmx
             var defaultOptions = new CustomResourceOptions
             {
                 Version = Utilities.Version,
+                AdditionalSecretOutputs =
+                {
+                    "api_key",
+                },
             };
             var merged = CustomResourceOptions.Merge(defaultOptions, options);
             // Override the ID if one was specified for consistency with other language SDKs.
@@ -39,6 +53,25 @@ namespace Pulumi.Improvmx
 
     public sealed class ProviderArgs : global::Pulumi.ResourceArgs
     {
+        [Input("api_key", required: true)]
+        private Input<string>? _api_key;
+
+        /// <summary>
+        /// API key for the ImprovMX
+        /// </summary>
+        public Input<string>? Api_key
+        {
+            get => _api_key;
+            set
+            {
+                var emptySecret = Output.CreateSecret(0);
+                _api_key = Output.Tuple<Input<string>?, int>(value, emptySecret).Apply(t => t.Item1);
+            }
+        }
+
+        [Input("version", required: true)]
+        public Input<string> Version { get; set; } = null!;
+
         public ProviderArgs()
         {
         }

@@ -5,8 +5,17 @@
 from . import _utilities
 import typing
 # Export this package's modules as members:
+from .alias import *
+from .domain import *
 from .provider import *
-from .random import *
+
+# Make subpackages available:
+if typing.TYPE_CHECKING:
+    import pulumi_improvmx.config as __config
+    config = __config
+else:
+    config = _utilities.lazy_import('pulumi_improvmx.config')
+
 _utilities.register(
     resource_modules="""
 [
@@ -15,7 +24,8 @@ _utilities.register(
   "mod": "index",
   "fqn": "pulumi_improvmx",
   "classes": {
-   "improvmx:index:Random": "Random"
+   "improvmx:index:Alias": "Alias",
+   "improvmx:index:Domain": "Domain"
   }
  }
 ]
